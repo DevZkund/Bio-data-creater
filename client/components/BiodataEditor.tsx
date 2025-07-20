@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -363,9 +365,55 @@ export default function BiodataEditor({
     }));
   };
 
-  const handleDownload = () => {
-    // Direct PDF download without payment
-    alert("PDF downloaded successfully!");
+  const handleDownload = async () => {
+    try {
+      // Get the preview element
+      const previewElement = document.querySelector(
+        ".biodata-preview",
+      ) as HTMLElement;
+      if (!previewElement) {
+        alert("Preview not found. Please try again.");
+        return;
+      }
+
+      // Create canvas from the preview
+      const canvas = await html2canvas(previewElement, {
+        useCORS: true,
+        allowTaint: true,
+        width: previewElement.scrollWidth,
+        height: previewElement.scrollHeight,
+      });
+
+      // Create PDF
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      // Calculate dimensions to fit A4
+      const imgWidth = 210;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      // Add the image to PDF
+      pdf.addImage(
+        canvas.toDataURL("image/png"),
+        "PNG",
+        0,
+        0,
+        imgWidth,
+        imgHeight,
+      );
+
+      // Download the PDF
+      const fileName = `${biodataData.personal.name || "biodata"}_biodata.pdf`;
+      pdf.save(fileName);
+
+      alert("PDF downloaded successfully!");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Error generating PDF. Please try again.");
+    }
   };
 
   // Add reload alert functionality
@@ -501,11 +549,10 @@ export default function BiodataEditor({
                     {predefinedColors.map((color) => (
                       <button
                         key={color}
-                        className={`w-8 h-8 rounded-md border-2 ${
-                          editorSettings.textColor === color
-                            ? "border-rose-500"
-                            : "border-gray-300"
-                        }`}
+                        className={`w-8 h-8 rounded-md border-2 ${editorSettings.textColor === color
+                          ? "border-rose-500"
+                          : "border-gray-300"
+                          }`}
                         style={{ backgroundColor: color }}
                         onClick={() => updateSetting("textColor", color)}
                       />
@@ -536,11 +583,10 @@ export default function BiodataEditor({
                     {predefinedBackgrounds.map((color) => (
                       <button
                         key={color}
-                        className={`w-8 h-8 rounded-md border-2 ${
-                          editorSettings.backgroundColor === color
-                            ? "border-rose-500"
-                            : "border-gray-300"
-                        }`}
+                        className={`w-8 h-8 rounded-md border-2 ${editorSettings.backgroundColor === color
+                          ? "border-rose-500"
+                          : "border-gray-300"
+                          }`}
                         style={{ backgroundColor: color }}
                         onClick={() => updateSetting("backgroundColor", color)}
                       />
@@ -686,11 +732,10 @@ export default function BiodataEditor({
                     {predefinedColors.map((color) => (
                       <button
                         key={color}
-                        className={`w-8 h-8 rounded-md border-2 ${
-                          editorSettings.profileImage.borderColor === color
-                            ? "border-rose-500"
-                            : "border-gray-300"
-                        }`}
+                        className={`w-8 h-8 rounded-md border-2 ${editorSettings.profileImage.borderColor === color
+                          ? "border-rose-500"
+                          : "border-gray-300"
+                          }`}
                         style={{ backgroundColor: color }}
                         onClick={() =>
                           updateSetting("profileImage", {
@@ -842,7 +887,7 @@ export default function BiodataEditor({
               </CardHeader>
               <CardContent className="h-full">
                 <div
-                  className="bg-white shadow-lg mx-auto"
+                  className="bg-white shadow-lg mx-auto biodata-preview m"
                   style={{ width: "210mm", minHeight: "297mm" }}
                 >
                   <BiodataPreview

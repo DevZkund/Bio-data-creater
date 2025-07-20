@@ -736,11 +736,7 @@ export default function BiodataPreview({
             {personal.name}
           </h1>
           <p className="text-rose-600 italic">Marriage Biodata</p>
-          <div className="w-28 h-28 mx-auto mt-4 bg-white border-4 border-rose-200 rounded-full shadow-lg">
-            <div className="w-full h-full flex items-center justify-center rounded-full">
-              <span className="text-sm text-gray-500">Photo</span>
-            </div>
-          </div>
+          {renderProfileImage("w-28 h-28 mx-auto mt-4")}
         </div>
 
         {/* Elegant Cards */}
@@ -1114,7 +1110,7 @@ export default function BiodataPreview({
         <div className="space-y-6">
           <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 border border-orange-200 shadow-md">
             <h3 className="text-xl font-serif text-orange-800 mb-4 flex items-center justify-center">
-              <span className="mr-2">🏺</span> व्यक्तिगत विवरण{" "}
+              <span className="mr-2">🏺</span> व्यक्तिगत ���िवरण{" "}
               <span className="ml-2">🏺</span>
             </h3>
             <div className="grid grid-cols-2 gap-4">
@@ -1137,7 +1133,7 @@ export default function BiodataPreview({
                 <div>माता: {family.motherName}</div>
               )}
               {contact.showFields.mobile && contact.mobile && (
-                <div>संपर्क: {contact.mobile}</div>
+                <div>���ंपर्क: {contact.mobile}</div>
               )}
             </div>
           </div>
@@ -2559,7 +2555,7 @@ export default function BiodataPreview({
   };
 
   return (
-    <div className="w-full h-full transform scale-90 origin-top-left">
+     <div className="w-full h-full transform scale-90 origin-center">
       {renderTemplate()}
     </div>
   );

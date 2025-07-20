@@ -329,7 +329,7 @@ export default function Templates() {
               Creating beautiful marriage biodata since 2024
             </p>
             <p className="text-sm text-gray-500">
-              © 2024 BiodataCreator. All rights reserved.
+              © 2024 Appsylo. All rights reserved.
             </p>
           </div>
         </div>
